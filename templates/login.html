@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block customcss %}
+<link href="/static/css/login.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <body class="text-center">
+    <form method="post" class="form-login">
+        <h1 class="h3 mb-3 font-weight-normal">Fazer Login</h1>
+
+        <label for="email" class="sr-only">Email</label>
+        <input type="email" id="{{ form.email.id }}" class="form-control" name="{{ form.email.name }}" placeholder="E-mail" value="{{ form.email.data or "" }}" required autofocus>
+        {% if form.email.errors %}
+            <div class="invalid-feedback">
+                {{ form.email.errors[0] }}
+            </div>
+        {% endif %}
+
+        <label for="{{ form.password.id }}" class="sr-only">Senha</label>
+        <input type="password" id="{{ form.password.id }}" class="form-control {{"is-invalid" if form.password.errors}}" name="{{ form.password.name }}" placeholder="Senha" required>
+        {% if form.password.errors %}
+            <div class="invalid-feedback">
+                {{ form.password.errors[0] }}
+            </div>
+        {% endif %}
+
+        {{ form.hidden_tag() }}
+
+        <button class="btn btn-lg btn-secondary btn-block" type="submit">Entrar</button>
+        <a href="/forget-password" class="btn btn-link">Esqueceu sua senha?</a>
+        <a href="/register" class="btn btn-link">Criar Conta</a>
+    </form>
+    </body>
+{% endblock %}

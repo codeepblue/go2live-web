@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% import "macros.html" as macros %}
+
+{% block title %}Gerenciar {{ live.title }}{% endblock %}
+
+{% block customcss %}
+<link href="/static/css/live.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="container col-md-12">
+        <div class="row">
+            {% include "player.html" %}
+            {% include "chat.html" %}
+        </div>
+        <hr>
+        <div class="row m-t-1">
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <ul class="list-group">
+                    <li class="list-group-item active">
+                        Configurações
+                    </li>
+                    <li class="list-group-item">
+                        <form action="/live/{{ live.id }}" method="post">
+                            <div class="form-group row">
+                                <label for="password" class="col-sm-4 col-form-label">Modo:</label>
+                                <div class="col-sm-8">
+                                    {{ macros.live_state_badge(live.state) }}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="password" class="col-sm-4 col-form-label">Expira em:</label>
+                                <div class="col-sm-8">
+                                    <select id="{{ form.expires_in.id }}" name="{{ form.expires_in.name }}" class="form-control">
+                                        <option value="0" {{ "selected" if not live.expires_in }}>Nāo expira</option>
+                                        {% for value in [1, 7, 15, 30] %}
+                                            <option value="{{ value }}" {{ "selected" if live.expires_in == value }}>{{ value }} {{ "dia" if value == 1 else "dias" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="password" class="col-sm-4 col-form-label">Senha de acesso:</label>
+                                <div class="col-sm-8">
+                                    <input type="password" class="form-control{{ " is-invalid" if form.password.errors }}" id="{{ form.password.id }}" name="{{ form.password.name }}" value="{{ live.password if live.password else "" }}">
+                                    {% if form.password.errors %}
+                                        <div class="invalid-feedback">
+                                            {{ form.password.errors[0] }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {{ form.hidden_tag() }}
+                            <div class="form-group row">
+                                <div class="col-md-12 col-sm-12">
+                                    <button type="submit" class="btn btn-primary">Salvar</button>
+                                    {% if live.state == "live" %}
+                                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#stop-modal">Parar</button>
+                                    {% elif live.state == "not-started" %}
+                                        <a href="{{ url_for("start_live", id=live.id) }}" class="btn btn-success">Iniciar</a>
+                                    {% endif %}
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-modal">Excluir</button>
+                                </div>
+                            </div>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <ul class="list-group">
+                    <li class="list-group-item active">Para transmitir</li>
+                    <li class="list-group-item">Server: <strong>"{{ ingest_url }}"</strong></li>
+                    <li class="list-group-item">Stream Key: <strong>"{{ live.stream_key }}"</strong></li>
+                </ul>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <ul class="list-group">
+                    <li class="list-group-item active">Para assistir</li>
+                    <li class="list-group-item">
+                        <a class="btn btn-link" href="{{ url_for("watch", watch_key=live.watch_key) }}" target="_blank">Abrir página</a></li>
+                    <li class="list-group-item">
+                        <strong>Incorporar:</strong>
+                        <textarea class="form-control"><iframe width="560" height="315" src="{{ embed_url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></textarea>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="stop-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="post" action="{{ url_for("stop_live", id=live.id) }}">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        Deseja realmente para a transmissão <strong>{{ live.title }}</strong>?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-warning">Parar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade" id="delete-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <form method="post" action="{{ url_for("delete_live", id=live.id) }}">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Deseja realmente excluir <strong>{{ live.title }}</strong>?
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Excluir</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </form>
+      </div>
+    </div>
+{% endblock %}
+
+{% block customjs %}
+    {% include "chat-js.html" %}
+    {% include "player-js.html" %}
+{% endblock %}

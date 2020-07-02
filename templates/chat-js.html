@@ -1,0 +1,43 @@
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf-8">
+    $(function() {
+        const socket = io.connect("{{ socket_io_url }}");
+
+        const room = "{{ live.id }}";
+
+        socket.on("connect", function() {
+            socket.emit("join", {
+                "nickname": "{{ username }}",
+                "room": room
+            })
+        })
+
+        socket.on('response', function(msg) {
+            $("#chat-box").append('<li class="list-group-item"><strong>'+msg.data.nickname+':</strong> '+msg.data.text+'</li>')
+        });
+
+        $("#chat-message").on("keyup", function(event){
+            if (event.keyCode === 13)
+            {
+                event.preventDefault();
+                $("#send-chat-message").click();
+                $("#chat-message").val("");
+                $("#chat-message").focus();
+            }
+        });
+
+        $("#send-chat-message").on("click", function () {
+            message = $("#chat-message").val()
+            if (message.length > 0)
+            {
+                chat_message = {
+                    room: room,
+                    nickname: "{{ username }}",
+                    text: $("#chat-message").val()
+                }
+
+                socket.emit('message', {data: chat_message});
+            }
+        });
+    })
+</script>

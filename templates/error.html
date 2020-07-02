@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block customcss %}
+    <link href="/static/css/error.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <body class="text-center">
+        <div class="form-login">
+            <ul class="list-group">
+                {% for error in errors %}
+                    <li class="list-group-item list-group-item-danger">{{ error }}</li>
+                {% endfor %}
+                {% if username %}
+                    <li class="list-group-item"><a href="{{ next_url }}">Voltar</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </body>
+{% endblock %}

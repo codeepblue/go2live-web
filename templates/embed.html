@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Assistir {{ live.title }}{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block customcss %}
+<style>
+html, body, #player {
+    margin: 0;
+    padding: 0;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div id="player" class="col-md-6"></div>
+{% endblock %}
+
+{% block customjs %}
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
+    <script>
+        $(function() {
+            var playerElement = document.getElementById("player");
+
+            var player = new Clappr.Player({
+                source: '{{ watch_source }}',
+                {% if live.poster %}
+                    poster: "",
+                {% endif %}
+                width: 560,
+                height: 315,
+                autoPlay: false,
+                hideMediaControls: false,
+            });
+
+            player.attachTo(playerElement);
+        });
+    </script>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

@@ -1,0 +1,11 @@
+{% macro live_state_badge(state) %}
+    {% if state == "not-started" %}
+        <span class="badge badge-primary">NÃO INICOU</span>
+    {% elif state == "live" %}
+        <span class="badge badge-success">LIVE</span>
+    {% elif state == "vod" %}
+        <span class="badge badge-secondary">VOD</span>
+    {% elif state == "expired" %}
+        <span class="badge badge-danger">EXPIROU</span>
+    {% endif %}
+{%- endmacro %}

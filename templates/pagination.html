@@ -1,0 +1,41 @@
+{% if number_of_pages > 0 %}
+<nav>
+  <ul class="pagination justify-content-center">
+    <li class="page-item{{ " disabled" if current_page <= 1 }}">
+      <a class="page-link" href="?p={{ current_page - 1 }}" aria-label="Anterior">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+          {% if current_page < 3 %}
+              <li class="page-item{{ " disabled" if current_page == 1 }}"><a class="page-link" href="?p=1">1</a></li>
+              <li class="page-item{{ " disabled" if current_page == 2 }}"><a class="page-link" href="?p=2">2</a></li>
+              <li class="page-item{{ " disabled" if current_page == 3 }}"><a class="page-link" href="?p=3">3</a></li>
+              <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+              <li class="page-item{{ " disabled" if current_page == number_of_pages }}"><a class="page-link" href="?p={{ number_of_pages }}">{{ number_of_pages }}</a></li>
+          {% elif current_page > 2 and current_page < number_of_pages-1 %}
+              <li class="page-item"><a class="page-link" href="?p=1">1</a></li>
+              <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+              <li class="page-item"><a class="page-link" href="?p={{ current_page - 1 }}">{{ current_page - 1 }}</a></li>
+              <li class="page-item disabled"><a class="page-link" href="?p={{ current_page }}">{{ current_page }}</a></li>
+              {% if current_page < number_of_pages %}
+                  <li class="page-item"><a class="page-link" href="?p={{ current_page + 1 }}">{{ current_page + 1 }}</a></li>
+              {% endif %}
+              {% if current_page-2 < number_of_pages %}
+                  <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+                  <li class="page-item"><a class="page-link" href="?p={{ number_of_pages }}">{{ number_of_pages }}</a></li>
+              {% endif %}
+          {% else %}
+              <li class="page-item{{ " disabled" if current_page == 1 }}"><a class="page-link" href="?p=1">1</a></li>
+              <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+              <li class="page-item{{ " disabled" if current_page == number_of_pages-2 }}"><a class="page-link" href="?p={{ number_of_pages-2 }}">{{ number_of_pages-2 }}</a></li>
+              <li class="page-item{{ " disabled" if current_page == number_of_pages-1 }}"><a class="page-link" href="?p={{ number_of_pages-1 }}">{{ number_of_pages-1 }}</a></li>
+              <li class="page-item{{ " disabled" if current_page == number_of_pages }}"><a class="page-link" href="?p={{ number_of_pages }}">{{ number_of_pages }}</a></li>
+          {% endif %}
+    <li class="page-item">
+      <a class="page-link" href="?p={{ current_page + 1 }}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+{% endif %}

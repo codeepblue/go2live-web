@@ -1,0 +1,11 @@
+#player {
+  margin: 0 auto;
+}
+
+.chat-box {
+  height: 322px;
+}
+
+.chat-box .list-group-item {
+  border: #fff;
+}

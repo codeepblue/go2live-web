@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Assistir {{ live.title }}{% endblock %}
+
+{% block customcss %}
+<link href="/static/css/watch.css" rel="stylesheet">
+{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
+    <div class="container col-md-12">
+        <div class="row">
+            {% include "player.html" %}
+            {% include "chat.html" %}
+        </div>
+        {% block controls %}
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block customjs %}
+    {% include "chat-js.html" %}
+    {% include "player-js.html" %}
+{% endblock %}

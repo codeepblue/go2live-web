@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block customcss %}
+    <link href="/static/css/login.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <body class="text-center">
+    <form method="post" class="form-login">
+        <h1 class="h3 mb-3 font-weight-normal">Informe os dados abaixo para prosseguir</h1>
+
+        <label for="{{ form.nickname.id }}" class="sr-only">Nome</label>
+        <input type="nickname" id="{{ form.nickname.id }}" class="form-control" name="{{ form.nickname.name }}" placeholder="Nome" value="{{ form.nickname.data or "" }}" required autofocus>
+        {% if form.nickname.errors %}
+            <div class="invalid-feedback">
+                {{ form.nickname.errors[0] }}
+            </div>
+        {% endif %}
+
+        {% if live_has_password %}
+            <label for="{{ form.password.id }}" class="sr-only">Senha</label>
+            <input type="password" id="{{ form.password.id }}" class="form-control {{"is-invalid" if form.password.errors}}" name="{{ form.password.name }}" placeholder="Senha" required>
+            {% if form.password.errors %}
+                <div class="invalid-feedback">
+                    {{ form.password.errors[0] }}
+                </div>
+            {% endif %}
+        {% endif %}
+
+        {{ form.hidden_tag() }}
+
+        <button class="btn btn-lg btn-secondary btn-block" type="submit">Assistir</button>
+    </form>
+    </body>
+{% endblock %}

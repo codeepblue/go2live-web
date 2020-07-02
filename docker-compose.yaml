@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  ingest:
+    image: codeepblue/ingest:latest
+    ports:
+      - "1935:1935"
+    volumes:
+      - ./record:/record
+
+  cdn:
+    image: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx-cdn.conf:/etc/nginx/nginx.conf:ro
+      - ./record:/usr/share/nginx/html:ro
+
+  web:
+    build: .
+    env_file: .env
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+      - ./record:/record
+    links:
+      - db
+
+  db:
+    image: postgres:12.3
+    environment:
+      - POSTGRES_USER=web
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=testing

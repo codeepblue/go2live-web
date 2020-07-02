@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% import 'macros.html' as macros %}
+
+{% block title %}
+    Dashboard
+{% endblock %}
+
+{% block customcss %}
+<link href="/static/css/dashboard.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <!--<h1 class="h2">Visualizações</h1>-->
+        <form action="/live" method="post" class="form-inline">
+            {{ form.csrf_token }}
+            <label class="sr-only" for="title">Título</label>
+            <input type="text" class="form-control mb-2 mr-sm-2" id="title" name="title" placeholder="Título da live" required>
+            <button type="submit" class="btn btn-primary mb-2">Nova Live</button>
+        </form>
+    </div>
+
+    <!--<canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>-->
+
+    <h2>Lives</h2>
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead>
+            <tr>
+                <th>Título</th>
+                <th class="text-center">Modo</th>
+                <th class="text-center">Duração</th>
+                <th class="text-center">Usuários</th>
+                <th>Links</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if not lives %}
+                <tr><td class="text-center" colspan="5">Você não tem nenhuma live</td></tr>
+            {% endif %}
+            {% for live in lives %}
+            <tr>
+                <td>{{ live.title }}</td>
+                <td class="text-center">
+                    {{ macros.live_state_badge(live.state) }}
+                </td>
+                <td class="text-center">{{ live.readable_duration or "N/A" }}</td>
+                <td class="text-center">{{ live.viewer_count or ("N/A" if not live.state == "vod" else "0") }}</td>
+                <td>
+                    <a class="btn btn-link" href="{{ url_for("get_live", id=live.id) }}">Gerenciar</a>
+                    <a class="btn btn-link" href="{{ url_for("watch", watch_key=live.watch_key) }}">Assistir</a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% include "pagination.html" %}
+    </div>
+{% endblock %}
+
+{% block customjs %}
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>-->
+<script src="/static/js/dashboard.js"></script></body>
+{% endblock %}
