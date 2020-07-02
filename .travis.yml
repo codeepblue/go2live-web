@@ -1,0 +1,20 @@
+language: python
+sudo: required
+dist: bionic
+services:
+  - docker
+python:
+  - "3.7"
+os:
+  - linux
+matrix:
+  fast_finish: true
+install:
+    - pip install -r requirements.txt
+script:
+  - docker build -t "codeepblue/go2live-web:$TRAVIS_COMMIT" .
+after_success:
+  - docker tag "codeepblue/go2live-web:$TRAVIS_COMMIT" "codeepblue/go2live-web:latest"
+  - docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASS
+  - docker push "codeepblue/go2live-web:$TRAVIS_COMMIT"
+  - docker push "codeepblue/go2live-web:latest"
