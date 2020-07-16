@@ -12,6 +12,7 @@ from flask_socketio import SocketIO, emit, join_room, send, leave_room
 from config import Configuration
 from crypto import Crypto
 from db import Database
+from cache import Cache
 from forms import LoginForm, CreateLiveForm, RegisterUserForm, UpdateLiveForm, AuthenticateWatcher
 from log_setup import get_logger
 from schema import User, generate_id, Live, generate_key, STATE_VOD, STATE_LIVE, STATE_NOT_STARTED
@@ -32,6 +33,9 @@ crypto = Crypto(config)
 
 # socket.io
 socketio = SocketIO(app)
+
+# cache
+cache = Cache(config)
 
 app.secret_key = config.app_session_key
 
@@ -238,6 +242,7 @@ def start_live(id):
         live.state = STATE_LIVE
         live.updated_at = datetime.now()
         db_session.add(live)
+    cache.set("live.stream_key.{}".format(live.stream_key))
     return redirect(url_for("get_live", id=id))
 
 

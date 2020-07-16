@@ -12,7 +12,7 @@ class Configuration(object):
 
     @property
     def db_driver(self):
-        return self._load("DB_DRIVER")
+        return "postgresql+psycopg2"
 
     @property
     def db_username(self):
@@ -28,7 +28,7 @@ class Configuration(object):
 
     @property
     def db_port(self):
-        return int(self._load("DB_PORT"))
+        return 5432
 
     @property
     def db_name(self):
@@ -76,3 +76,15 @@ class Configuration(object):
     @property
     def socket_io_url(self):
         return self._load("SOCKET_IO_SERVER")
+
+    @property
+    def redis_host(self):
+        return "redis"
+
+    @property
+    def redis_port(self):
+        return 6379
+
+    @property
+    def redis_db(self):
+        return 0

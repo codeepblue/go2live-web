@@ -2,11 +2,23 @@ version: "3"
 
 services:
   ingest:
-    image: codeepblue/ingest:latest
+    image: codeepblue/go2live-ingest:latest
     ports:
       - "1935:1935"
+    links:
+      - bridge
     volumes:
       - ./record:/record
+
+  bridge:
+    image: codeepblue/go2live-ingest-bridge:latest
+    links:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+
+  redis:
+    image: redis:latest
 
   cdn:
     image: nginx
@@ -26,6 +38,7 @@ services:
       - ./record:/record
     links:
       - db
+      - redis
 
   db:
     image: postgres:12.3
