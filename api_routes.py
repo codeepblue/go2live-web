@@ -67,26 +67,26 @@ def login():
     return render_template("login.html", form=login_form)
 
 
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    register_user_form = RegisterUserForm()
-    if register_user_form.validate_on_submit():
-        user = User()
-        register_user_form.populate_obj(user)
-        with db.open_session() as db_session:
-            user_email_exist = db_session.query(User.email).filter(User.email == user.email).count() > 0
-        if user_email_exist:
-            register_user_form.email.errors.append("Email already tacked")
-            return render_template("register.html", form=register_user_form)
-        user.id = generate_id()
-        user.created_at = datetime.now()
-        user.updated_at = datetime.now()
-        user.password = crypto.hash(user.password)
-        with db.open_session() as db_session:
-            db_session.add(user)
-
-        return redirect(url_for("login"))
-    return render_template("register.html", form=register_user_form)
+# @app.route("/register", methods=["GET", "POST"])
+# def register():
+#     register_user_form = RegisterUserForm()
+#     if register_user_form.validate_on_submit():
+#         user = User()
+#         register_user_form.populate_obj(user)
+#         with db.open_session() as db_session:
+#             user_email_exist = db_session.query(User.email).filter(User.email == user.email).count() > 0
+#         if user_email_exist:
+#             register_user_form.email.errors.append("Email already tacked")
+#             return render_template("register.html", form=register_user_form)
+#         user.id = generate_id()
+#         user.created_at = datetime.now()
+#         user.updated_at = datetime.now()
+#         user.password = crypto.hash(user.password)
+#         with db.open_session() as db_session:
+#             db_session.add(user)
+#
+#         return redirect(url_for("login"))
+#     return render_template("register.html", form=register_user_form)
 
 
 @app.route("/logout", methods=["GET"])

@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  ingest:
+    build: .
+    ports:
+      - "1935:1935"
+      - "8080:80"
+    volumes:
+      - ./record:/record
+    links:
+      - bridge
+  bridge:
+    build: ./bridge
+    volumes:
+      - ./bridge:/app
+    links:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+  redis:
+    image: redis

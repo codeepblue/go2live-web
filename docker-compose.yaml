@@ -1,8 +1,20 @@
 version: "3"
 
 services:
+  web:
+    build: .
+    env_file: .env
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+      - ./record:/record
+    links:
+      - db
+      - redis
+
   ingest:
-    image: codeepblue/go2live-ingest:latest
+    build: ./ingest
     ports:
       - "1935:1935"
     links:
@@ -11,7 +23,7 @@ services:
       - ./record:/record
 
   bridge:
-    image: codeepblue/go2live-ingest-bridge:latest
+    build: ./bridge
     links:
       - redis
     environment:
@@ -27,18 +39,6 @@ services:
     volumes:
       - ./nginx-cdn.conf:/etc/nginx/nginx.conf:ro
       - ./record:/usr/share/nginx/html:ro
-
-  web:
-    build: .
-    env_file: .env
-    ports:
-      - "5000:5000"
-    volumes:
-      - .:/app
-      - ./record:/record
-    links:
-      - db
-      - redis
 
   db:
     image: postgres:12.3

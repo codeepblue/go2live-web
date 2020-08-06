@@ -1,0 +1,22 @@
+language: python
+sudo: required
+dist: bionic
+services:
+  - docker
+python:
+  - "3.7"
+os:
+  - linux
+matrix:
+  fast_finish: true
+script:
+  - docker build -t "codeepblue/go2live-ingest:$TRAVIS_COMMIT" .
+  - cd bridge && docker build -t "codeepblue/go2live-ingest-bridge:$TRAVIS_COMMIT" .
+after_success:
+  - docker tag "codeepblue/go2live-ingest:$TRAVIS_COMMIT" "codeepblue/go2live-ingest:latest"
+  - docker tag "codeepblue/go2live-ingest-bridge:$TRAVIS_COMMIT" "codeepblue/go2live-ingest-bridge:latest"
+  - docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASS
+  - docker push "codeepblue/go2live-ingest:$TRAVIS_COMMIT"
+  - docker push "codeepblue/go2live-ingest:latest"
+  - docker push "codeepblue/go2live-ingest-bridge:$TRAVIS_COMMIT"
+  - docker push "codeepblue/go2live-ingest-bridge:latest"

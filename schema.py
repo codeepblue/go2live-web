@@ -12,6 +12,7 @@ STATE_NOT_STARTED = "not-started"
 STATE_LIVE = "live"
 STATE_VOD = "vod"
 STATE_EXPIRED = "expired"
+STATE_GENERATING_VOD = "generating-vod"
 
 
 def generate_id():
@@ -19,7 +20,7 @@ def generate_id():
 
 
 def generate_key(size=11):
-    valid_chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_"
+    valid_chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
     key = ""
     for i in range(size):
         key += random.choice(valid_chars)

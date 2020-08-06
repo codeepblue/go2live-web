@@ -88,3 +88,7 @@ class Configuration(object):
     @property
     def redis_db(self):
         return 0
+
+    @property
+    def celery_host(self):
+        return 'amqp://guest@localhost//'
