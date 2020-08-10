@@ -221,11 +221,9 @@ def generate_vod(stream_key):
     vod_content = "#EXTM3U\n#EXT-X-VERSION:3\n#EXT-X-PLAYLIST-TYPE:VOD\n#EXT-X-TARGETDURATION:10\n"
     base_path = os.path.join(config.record_path, stream_key)
     files = natsorted([f for f in os.listdir(base_path) if f.endswith(".ts")])
-    total_duration = 0.0
+    total_duration = 16.667 * len(files)
     for file in files:
-        clip = VideoFileClip(os.path.join(base_path, file))
-        vod_content += "#EXTINF:{},\n{}\n".format(clip.duration, file)
-        total_duration += clip.duration
+        vod_content += "#EXTINF:{},\n{}\n".format(16.667, file)
     vod_file = os.path.join(config.record_path, stream_key, "vod.m3u8")
     vod_content += "#EXT-X-ENDLIST"
     with open(vod_file, "w+") as vod:
