@@ -57,7 +57,7 @@
                                     <button type="submit" class="btn btn-primary">Salvar</button>
                                     {% if live.state == "live" %}
                                         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#stop-modal">Parar</button>
-                                    {% elif live.state == "not-started" %}
+                                    {% else %}
                                         <a href="{{ url_for("start_live", id=live.id) }}" class="btn btn-success">Iniciar</a>
                                     {% endif %}
                                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-modal">Excluir</button>
